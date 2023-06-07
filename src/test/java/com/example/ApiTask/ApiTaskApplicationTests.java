@@ -1,10 +1,10 @@
-package com.example.ApiTaks;
+package com.example.ApiTask;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiTaksApplicationTests {
+class ApiTaskApplicationTests {
 
 	@Test
 	void contextLoads() {

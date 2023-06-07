@@ -1,4 +1,4 @@
-package com.example.ApiTaks.dtos;
+package com.example.ApiTask.dtos;
 
 import lombok.Getter;
 import lombok.Setter;

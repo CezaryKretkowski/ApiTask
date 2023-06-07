@@ -1,8 +1,7 @@
-package com.example.ApiTaks.controller;
+package com.example.ApiTask.controller;
 
-import com.example.ApiTaks.dtos.ErrorDto;
-import com.example.ApiTaks.dtos.RepositoryDto;
-import com.example.ApiTaks.service.GitService;
+import com.example.ApiTask.dtos.ErrorDto;
+import com.example.ApiTask.service.GitService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,15 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import java.util.List;
-
 @RestController
 public class GitController {
     private final GitService gitService;
     public  GitController(GitService service){
         gitService=service;
     }
+//    private boolean checkUnsafeUsername(){
+//
+//    }
     @GetMapping("/repositories/{username}")
     public ResponseEntity<?> getGitUserRepositories(@PathVariable String username,@RequestHeader("Accept") String acceptHeader){
         var list =  gitService.getRepository(username);
