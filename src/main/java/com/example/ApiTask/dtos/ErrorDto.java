@@ -3,7 +3,9 @@ package com.example.ApiTask.dtos;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
-
+/**
+ * ErrorDto -  is a data transfer object to store information about error.
+ * */
 @Getter
 @Setter
 public class ErrorDto {

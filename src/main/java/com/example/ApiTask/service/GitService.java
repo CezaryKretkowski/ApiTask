@@ -13,17 +13,34 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 
+/**
+ * GitService class is a service which aim is get information from gitHub api and past it to controller.
+ */
 @Service
 public class GitService {
+    /**
+     * gitHubUrl - is base url to gitHub api.
+     */
     private final String gitHubUrl = "https://api.github.com";
+
+    /**
+     * restTemplate - is an object of the RestTemplate class by means of which http methods are executed.
+     * */
     private final RestTemplate restTemplate;
 
+    /**
+     * class constructor.
+     * */
     public GitService(){
         this.restTemplate = new RestTemplate();
     }
 
-
-
+    /**
+     * getBranches - is a method whose purpose is to download all branches for a specific repository.
+     * @param repositories - is List of repositories for specific user.
+     * @param username - is name of user.
+     * @return - returns updated list of user repository.
+     * */
     private Optional<List<RepositoryDto>> getBranches(List<RepositoryDto> repositories,String username){
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(gitHubUrl).path("/repos/{username}/").buildAndExpand(username);
         String apiUrl = uriComponents.toUriString();
@@ -46,6 +63,11 @@ public class GitService {
         return Optional.of(repositories);
     }
 
+    /**
+     * getRepository - is a method whose purpose is to download all repositories for a specific user.
+     * @param username - is name of user.
+     * @return - returns updated list of user repository.
+     * */
     public Optional<List<RepositoryDto>> getRepository(String username){
 
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(gitHubUrl).path("/users/{username}/repos").buildAndExpand(username);

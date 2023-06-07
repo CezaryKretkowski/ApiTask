@@ -9,15 +9,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * GitController - is the controller that is responsible for communicating with the user.
+ * */
 @RestController
 public class GitController {
+
+    /**
+     * gitService - is instance of service which  get gitHub repositories for specify user.
+     * */
     private final GitService gitService;
     public  GitController(GitService service){
         gitService=service;
     }
-//    private boolean checkUnsafeUsername(){
-//
-//    }
+
+    /**
+     *getGitUserRepositories - supports the get method and returns a list of repositories for a given user.
+     * @param username  - name od user.
+     * @return - List of repositories. If user is not on gitHub, method return status code 404. If user past in headers "Accept:application/xml", method return status code 406
+     * */
     @GetMapping("/repositories/{username}")
     public ResponseEntity<?> getGitUserRepositories(@PathVariable String username,@RequestHeader("Accept") String acceptHeader){
         var list =  gitService.getRepository(username);
