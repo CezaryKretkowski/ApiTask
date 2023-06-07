@@ -21,6 +21,6 @@ The query body looks like this:
 http://localhost:8080/repositories/{username}
 ```
 In the query header, pass the accept parameter "application/json"
-for "application/json" header, serverz will return code 406
+for "application/json" header, server will return code 406
 
-![Cannot open fille ]("")
+![Cannot open fille ](ExampleOfUse.png)
