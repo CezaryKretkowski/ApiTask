@@ -1,6 +1,7 @@
 package com.example.ApiTask.service;
 import com.example.ApiTask.dtos.BranchDto;
 import com.example.ApiTask.dtos.RepositoryDto;
+import lombok.Setter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -26,7 +27,8 @@ public class GitService {
     /**
      * restTemplate - is an object of the RestTemplate class by means of which http methods are executed.
      * */
-    private final RestTemplate restTemplate;
+    @Setter
+    private  RestTemplate restTemplate;
 
     /**
      * class constructor.
@@ -35,13 +37,15 @@ public class GitService {
         this.restTemplate = new RestTemplate();
     }
 
+
+
     /**
      * getBranches - is a method whose purpose is to download all branches for a specific repository.
      * @param repositories - is List of repositories for specific user.
      * @param username - is name of user.
      * @return - returns updated list of user repository.
      * */
-    private Optional<List<RepositoryDto>> getBranches(List<RepositoryDto> repositories,String username){
+    private List<RepositoryDto> getBranches(List<RepositoryDto> repositories,String username){
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(gitHubUrl).path("/repos/{username}/").buildAndExpand(username);
         String apiUrl = uriComponents.toUriString();
         for (RepositoryDto repository : repositories){
@@ -60,7 +64,7 @@ public class GitService {
             }
 
         }
-        return Optional.of(repositories);
+        return repositories;
     }
 
     /**
@@ -74,14 +78,16 @@ public class GitService {
         String apiUrl = uriComponents.toUriString();
         Map<String, String> params = new HashMap<String, String>();
         params.put("type","owner");
+
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+
 
         ResponseEntity<RepositoryDto[]> response;
         try{
             response = restTemplate.exchange(apiUrl, HttpMethod.GET, null, RepositoryDto[].class,params);
             if (response.getStatusCode().is2xxSuccessful()) {
-                return getBranches(Arrays.asList(response.getBody()),username);
+                return Optional.of(getBranches(Arrays.asList(response.getBody()),username));
             } else {
                 return Optional.empty();
             }
