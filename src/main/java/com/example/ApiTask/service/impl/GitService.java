@@ -38,18 +38,25 @@ public class GitService implements IGitService {
 
     private List<RepositoryDto> getBranches(List<RepositoryDto> repositories,String username){
         return repositories.stream().map(repository->{
-            String repo = repository.name();
-            URI uri = UriComponentsBuilder.fromHttpUrl(gitHubUrl).path("/repos/{username}/{repo}/branches").buildAndExpand(username,repo).toUri();
+            URI uri = UriComponentsBuilder
+                    .fromHttpUrl(gitHubUrl)
+                    .path("/repos/{username}/{repo}/branches")
+                    .buildAndExpand(username,repository.name())
+                    .toUri();
+
             List<BranchDto> branches = webClient.get()
                     .uri(uri)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .onStatus(status->status.value()!=HttpStatus.OK.value(),
                             response->Mono.error(new ResponseStatusException(response.statusCode())))
-                    .bodyToFlux(BranchDto.class).collectList().block();
-            return new RepositoryDto(repository.name(),repository.htmlUrl(),branches);
-        }).collect(Collectors.toList());
+                    .bodyToFlux(BranchDto.class)
+                    .collectList()
+                    .block();
 
+            return new RepositoryDto(repository.name(),repository.htmlUrl(),branches);
+
+        }).collect(Collectors.toList());
     }
 
     @Override
