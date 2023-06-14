@@ -22,6 +22,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -34,10 +35,9 @@ public class GitService implements IGitService {
     public GitService(WebClient client){
         this.webClient=client;
     }
-    
+
     private List<RepositoryDto> getBranches(List<RepositoryDto> repositories,String username){
-        List<RepositoryDto> repos = new ArrayList<>();
-        for (RepositoryDto repository : repositories){
+        return repositories.stream().map(repository->{
             String repo = repository.name();
             URI uri = UriComponentsBuilder.fromHttpUrl(gitHubUrl).path("/repos/{username}/{repo}/branches").buildAndExpand(username,repo).toUri();
             List<BranchDto> branches = webClient.get()
@@ -47,9 +47,9 @@ public class GitService implements IGitService {
                     .onStatus(status->status.value()!=HttpStatus.OK.value(),
                             response->Mono.error(new ResponseStatusException(response.statusCode())))
                     .bodyToFlux(BranchDto.class).collectList().block();
-            repos.add(new RepositoryDto(repository.name(),repository.htmlUrl(),branches));
-        }
-        return repos;
+            return new RepositoryDto(repository.name(),repository.htmlUrl(),branches);
+        }).collect(Collectors.toList());
+
     }
 
     @Override
